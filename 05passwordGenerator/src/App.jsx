@@ -22,6 +22,7 @@ function App() {
     
     }
     setPassword(pass);
+    
 
   }, [length, numAllowed, charAllowed, setPassword]) 
   
@@ -37,17 +38,17 @@ useEffect(() => {
   return (
     <div> 
     <h1 className= 'text-4xl text-center text-white'>Password Generator</h1>
-    <div className='w-full max-w-md mx-auto shadow-md rounded-lg px-4 my-8 text-orange-500 bg-gray-800'>test</div>
-    <div className='flex shadow rounded-lg overflow-hidden mb-4'>
+    <div className='w-full max-w-md mx-auto shadow-md rounded-lg px-4 my-8 text-orange-500 bg-gray-800'>
+    <div className='flex shadow rounded-lg overflow-hidden mb-4 py-5 '>
       <input type='text'
           value={password}
-          className='outline-none w-full py-1 px-3'
+          className='outline-none w-full py-1 px-3 rounded-lg'
           placeholder='password'
           readOnly
           ref={passwordRef}
           />
         <button
-        onClick={copyPasstoClipboard} className='outline-none bg-blue-500 text-white px-3 py-0.5'>Copy</button>
+        onClick={copyPasstoClipboard} className='outline-none bg-blue-500 text-white px-3 py-0.5 rounded-lg pl-3 mr-3 ml-1'>Copy</button>
       
     </div>
     <div className='flex text-sm gap-x-2'>
@@ -89,6 +90,7 @@ useEffect(() => {
 
     </div>
     
+    </div>
     </div>
   )
 }
