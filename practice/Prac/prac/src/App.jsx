@@ -1,32 +1,43 @@
 import React from "react";
+import { useState } from "react";
 
 
 function PageContent({products}){
+  const [filterText, setFilterText] = useState('');
+  const[inStockOnly, setInStockOnly] = useState(false);
+
   return (
-   <table>
-    <thead>
-      <tr>
-        <td>Name</td>
-        <td>Price</td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <SearchBar/>
-        <ProductTable products={products}/> </tr>
-        </tbody>
-    </table> 
+   <div>
+        <SearchBar
+        filterText={filterText}
+        inStockOnly={inStockOnly} 
+        onFilterTextChange={setFilterText}
+        onInStockOnlyChange={setInStockOnly}/>
+
+        <ProductTable 
+        products={products}
+        filterText={filterText}
+        inStockOnly={inStockOnly} />
+     </div>
   );
 }
 
+
 function ProductRow({product}){
+  const name = product.stocked ? product.name : 
+  <span style={{ color: 'red'}}>
+    {product.name}
+    </span>
+
   return(
     <tr>
-    <td>{product.name}</td>
+    <td>{name}</td>
     <td>{product.price}</td>
     </tr>
   )
 }
+
+
 function ProductTable({products}){
   let items = [];
   let lastCategory = null;
@@ -36,7 +47,6 @@ function ProductTable({products}){
       items.push(<ProductCategoryRow
       category={product.category}
       key={product.category}/>)
-
     } 
      items.push(
       <ProductRow product={product} key={product.name}/>
@@ -44,12 +54,20 @@ function ProductTable({products}){
     lastCategory = product.category;
     
   });
-  return (
+  return ( 
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+        </tr>
+      </thead>
     
-    <>{items}</>
-    
+    <tbody>{items}</tbody> 
+    </table>
   )
 }
+
 
 function ProductCategoryRow({category}){
   return(
@@ -59,18 +77,25 @@ function ProductCategoryRow({category}){
   )
 }
 
-function SearchBar(){
 
+function SearchBar( {filterText, inStockOnly, onFilterTextChange, onInStockOnlyChange}) {
   return (
     <form>
-      <input type='text' placeholder='Search...'/>
+      <input 
+      type='text' 
+      value={filterText}
+      placeholder='Search...'
+      onChange={(e) => {onFilterTextChange(e.target.value)}}/>
         <label> 
-          <input type='checkbox'/> {' '}
+          <input
+           type='checkbox'
+           checked={inStockOnly}
+          onChange={(e) => onInStockOnlyChange(e.target.checked) }
+           /> {' '}
           Only Show products in stock
         </label>
     </form>
   )
-
 }
 
 const PRODUCTS = [
@@ -83,6 +108,7 @@ const PRODUCTS = [
 ];
 
 function App(){
+ 
   console.log("Helooooo");
   return (<PageContent products={PRODUCTS}/> )
 }
