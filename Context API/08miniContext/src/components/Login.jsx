@@ -5,7 +5,7 @@ function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const {setUser} = useContext(UserContext)
+    const {setUser} = useContext(UserContext)  //setUser is obj  // sending data
 
 
     const handleSubmit = (e) => {
@@ -20,7 +20,7 @@ function Login() {
      value = {username} 
      onChange={(e) => setUsername(e.target.value)}
      placeholder='usename'/>
-
+    {' '}
      <input type = 'text' 
      placeholder='password'
      value = {password} 

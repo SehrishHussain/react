@@ -16,3 +16,4 @@ export default UserContext;  // sent it in export. of variable which is a method
 // <Card/>
 // </UserContext>
 // Now this wrapper becomes a PROVIDER! i.e all these components inside UserContext will get access of global UserContext (global UserContext is like a global variable).
+// Next step is to make a Provider.
