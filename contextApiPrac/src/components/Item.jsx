@@ -1,8 +1,10 @@
-import React, {useContext} from "react";
-import { CartContext } from "../context/CartContext";
+import React  from "react";
+import { useCart } from "../context/CartContext";
+
 
 const Item = (props) => {
-    const cart = useContext(CartContext)
+    const cart = useCart();
+
     console.log("cart", cart)
     return (
         <div className="item-card text-color-pink">
