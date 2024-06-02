@@ -7,8 +7,8 @@ export const ThemeContext = React.createContext({ // we can use default value he
 
 
 themeMode: 'light',  //varaible and methods
-darkTheme: () => {},  //this is a drak theme fn
-lightTheme: () => {},  // this is light theme fn. These both are methods
+ darkTheme: () => {},  //this is a drak theme fn
+ lightTheme: () => {},  // this is light theme fn. These both are methods
 
 })
 
