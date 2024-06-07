@@ -1,0 +1,26 @@
+import {createSlice, nanoid} from '@reduxjs/toolkit';
+
+const initialState = {      //initial state, we may be fetching data from DB
+    todos: [{ id: 1, text: 'hello world'}]
+}
+
+export const todoSlice = createSlice({  // making slice. This is bigger version of reducer
+    name: 'todo',  // this createslice takes objects. Name must be shown in redux-toolkit
+    initalState,
+    reducers: {     //this is reducer. It has properties and fn
+        addTodo: (state, action) => {  //addTodo is a property. State gives access to variables of initial state
+            const todo = {
+                id: nanoid(),
+                 text: action.payload 
+                } 
+                state.todos.push(todo); //We added todo to existing initial state data i.e. todos
+        },
+        removeTodo: (state, action) => {
+            state.todos = state.todos.filter( () => todo.id !== action.payload )
+        },
+    }
+});
+
+export const {addTodo, removeTodo} = todoSlice.actions
+
+export default todoSlice.reducer; //exporting all reducers
