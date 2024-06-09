@@ -17,7 +17,7 @@ function App() {
   }
 
   const deleteTodo = (id) => {
-    setTodos((prev) => prev.filter((todo) => todo !== id ))
+    setTodos((prev) => prev.filter((todo) => todo.id !== id ))
   }
 
   const toggleComplete = (id) => {
@@ -52,7 +52,7 @@ function App() {
                 </div>
               ))}
               </div>
-      <TodoItems/>
+      
       </div>
       </div>
       </TodoProvider>
