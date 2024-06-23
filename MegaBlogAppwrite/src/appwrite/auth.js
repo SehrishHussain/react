@@ -6,7 +6,7 @@ export class AuthService{
     client = new Client();
     account;
 
-    constructor() {
+    constructor() { //made constructor cz want to make client n acct only when client is made
         this.client
         .setEndpoint(conf.appwriteUrl)
         .setProject(conf.appwriteProjectId);
@@ -18,10 +18,10 @@ export class AuthService{
            const userAccount = await this.account.create(ID.unique(), email, password, name);
            if (userAccount) {
             // call another method
-            this.login({email, password})
+            this.login({email, password}) //want to login directly if userAccount is succfully made
             
            } else {
-            return userAccount
+            return userAccount //if acct not made userAcount can be null
             
            }
         } catch (error) {
@@ -45,7 +45,7 @@ export class AuthService{
             
         } catch (error) {
            // throw error;
-            console.log("appwrite service: : ", error);
+            console.log("appwrite service: current user : ", error);
             
         }
 
