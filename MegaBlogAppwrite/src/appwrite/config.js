@@ -2,7 +2,7 @@
 
 import conf from "../confg/confg";
 
-import { Client, ID, Databases, Strorage, Query } from "appwrite";
+import { Client, ID, Databases, Storage, Query } from "appwrite";
 
 
 export class Service{
