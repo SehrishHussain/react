@@ -5,6 +5,7 @@ import conf from "../confg/confg";
 import { Client, ID, Databases, Storage, Query } from "appwrite";
 
 
+
 export class Service{
     client = new Client();
     databases;

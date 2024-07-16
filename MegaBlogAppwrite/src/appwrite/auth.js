@@ -2,6 +2,9 @@ import conf from "../confg/confg";
 
 import { Client, Account, ID } from "appwrite";
 
+console.log('Appwrite Endpoint:', conf.appwriteUrl);
+console.log('Appwrite Project ID:',conf.appwriteProjectId);
+
 export class AuthService{
     client = new Client();
     account;
@@ -18,7 +21,7 @@ export class AuthService{
            const userAccount = await this.account.create(ID.unique(), email, password, name);
            if (userAccount) {
             // call another method
-            this.login({email, password}) //want to login directly if userAccount is succfully made
+            return this.login({email, password}) //want to login directly if userAccount is succfully made
             
            } else {
             return userAccount //if acct not made userAcount can be null
@@ -41,7 +44,7 @@ export class AuthService{
 
     async getCurrentUser() {
         try {
-            await this.account.get();
+           return await this.account.get();
             
         } catch (error) {
            // throw error;
