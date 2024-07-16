@@ -1,6 +1,6 @@
 import React from 'react'
 // this defines styling properties. Just like a container
-function Container() {
+function Container({children}) {
   return (
     <div className='w-full max-w-7xl mx-auto
     px-'>
