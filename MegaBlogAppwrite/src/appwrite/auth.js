@@ -14,11 +14,13 @@ export class AuthService{
         .setEndpoint(conf.appwriteUrl)
         .setProject(conf.appwriteProjectId);
         this.account = new Account(this.client);
+        console.log("createeMAILsESS", this.account.createEmailPasswordSession("email.COM", "asasasasas"))
     }
 
     async createAccount({email, password, name}) {
         try {
            const userAccount = await this.account.create(ID.unique(), email, password, name);
+           console.log('User account created:', userAccount);
            if (userAccount) {
             // call another method
             return this.login({email, password}) //want to login directly if userAccount is succfully made
@@ -33,15 +35,15 @@ export class AuthService{
         }
     }
 
-    async login({email, password}) {
+     async login({email, password}) {
         try {
-            return await this.account.createEmailSession(email, password);
+            return await this.account.createEmailPasswordSession(email, password);
         } catch (error) {
             throw error
             
         }
     }
-
+   
     async getCurrentUser() {
         try {
            return await this.account.get();
@@ -64,7 +66,7 @@ export class AuthService{
             console.log("appwrite service: : logout ", error);
             
         }
-    }
+    } 
 }
 
 const authService = new AuthService(); // exporting obj with all fn instead of AuthService class

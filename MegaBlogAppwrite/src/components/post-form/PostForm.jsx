@@ -5,22 +5,22 @@ import appwriteService from '../../appwrite/config'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-function PostForm({post}) {
+export default function PostForm({post}) {
     // watch: kisi field ko conti monitor krna hai tu watch dety hain, setValue: form k ander value set krni hai tu directly value: kr k nai dety react-hook-form mei. So we setvalue via setValues, Control: form ka control
     const {register, handleSubmit, watch, setValue, control, getValues} = useForm({
         defaultValues:{
             title: post?.title || '',
-            slug: post?.slug || '',
+            slug: post?.$id || '',
             content: post?.content || '',
             status: post?.status || 'active',
         },
     })
     const navigate = useNavigate()
-    const userData = useSelector(state => state.user.userData)
+    const userData = useSelector(state => state.auth.userData)
     // what to do when user submits form: must have sent data. In react-hook-form data is accessed via register object
     const submit = async(data) => {
         if(post) {
-            const file = data.images[0] ? appwriteService.uploadFile(data.image[0]) : null
+            const file = data.images[0] ? await appwriteService.uploadFile(data.image[0]) : null;
             if (file) {
                 appwriteService.deleteFile(post.featuredImage)
             }
@@ -119,4 +119,4 @@ function PostForm({post}) {
 );
 }
 
-export default PostForm
+
