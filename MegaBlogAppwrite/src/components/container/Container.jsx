@@ -1,12 +1,10 @@
-import React from 'react'
+
 // this defines styling properties. Just like a container
+import React from 'react'
+
 function Container({children}) {
-  return (
-    <div className='w-full max-w-7xl mx-auto
-    px-'>
-      {children}
-    </div>
-  )
+  return <div className='w-auto, h-auto, and max-w-full'>{children}</div>;
+  
 }
 
 export default Container

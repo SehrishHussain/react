@@ -12,6 +12,7 @@ export default function RTE({name, control, label, defaultValue=''}) {
     render={({field: {onChange}}) => ( // any change happens in this field inform us via a render
         // next is place watevr element we want to render i/e Editor
             <Editor
+            apiKey='kfpaup2c8cv86a5ehtgm4tpjazsfwa0whoyn9tm4aw55y1q9'
             initialValue={defaultValue}
             init={{
                 initialValue: defaultValue,

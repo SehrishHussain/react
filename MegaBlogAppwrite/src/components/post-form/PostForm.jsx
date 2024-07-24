@@ -6,10 +6,13 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 export default function PostForm({post}) {
-    // watch: kisi field ko conti monitor krna hai tu watch dety hain, setValue: form k ander value set krni hai tu directly value: kr k nai dety react-hook-form mei. So we setvalue via setValues, Control: form ka control
+    // watch: kisi field ko conti monitor krna hai tu watch dety hain,
+    // setValue: form k ander value set krni hai
+    // tu directly value: kr k nai dety react-hook-form mei. So we setvalue via setValues,
+    // Control: form ka control
     const {register, handleSubmit, watch, setValue, control, getValues} = useForm({
         defaultValues:{
-            title: post?.title || '',
+            title: post?.title || '', // title: post && post.title ? post.title : '';
             slug: post?.$id || '',
             content: post?.content || '',
             status: post?.status || 'active',
@@ -17,37 +20,46 @@ export default function PostForm({post}) {
     })
     const navigate = useNavigate()
     const userData = useSelector(state => state.auth.userData)
-    // what to do when user submits form: must have sent data. In react-hook-form data is accessed via register object
+    // what to do when user submits form: must have sent data. 
+    // In react-hook-form data is accessed via register object
     const submit = async(data) => {
-        if(post) {
-            const file = data.images[0] ? await appwriteService.uploadFile(data.image[0]) : null;
-            if (file) {
-                appwriteService.deleteFile(post.featuredImage)
+           let file = null;
+
+           if (data.image[0]) {
+            file = await appwriteService.uploadFile(data.image[0]);
+            console.log("uploadFile(data.image[0])");
+            if (post && post.featuredImage){
+                await appwriteService.deleteFile(post.featuredImage);
+                console.log("appwrite delete featuredImage")
+            
             }
+           }
+           if (post) {
+            console.log("if post for updatePost blog update")
             const dbPost = await appwriteService.updatePost(post.$id, {
                 ...data,
-                featuredImage: file ? file.$id : undefined,
+                featuredImage: file ? file.$id :  post.featuredImage, // file? data.images[0]
+                
             })
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`)
                 }   
         } else { // when user wants to creates a new form
-            const file = await appwriteService.uploadFile(data.image[0]);
-
             if (file) {
-                const fileId= file.$id
-                data.featuredImage = fileId
-                const dbPost = await appwriteService.createPost({
-                    ...data,
-                    userId: userData.$id,
-                })
-                if (dbPost) {
-                    navigate(`/post/${dbPost.$id}`)
-                }
+                data.featuredImage = file.$id;
+                console.log("new post: data.featuredImage = file.$id; ")
             }
+            const dbPost = await appwriteService.createPost({
+                ...data,
+                userId: userData.$id,
+            });
+    
+            if (dbPost) {
+                navigate(`/post/${dbPost.$id}`);
 
         }
     }
+}
     const slugTransform = useCallback((value) => {
         if (value && typeof value === "string")
             return value
@@ -57,10 +69,10 @@ export default function PostForm({post}) {
                 .replace(/\s/g, "-");
 
         return "";
-    }, []);
+    }, []); // why emopty dep arr: cz its updated once in the  beginning  
     React.useEffect(() => { //got watch from react hook form
-        const subscription = watch((value, { name }) => {
-            if (name === "title") { // "slug come from input filed jiska naam slug rakha hai" value is an obj
+        const subscription = watch((value, { name }) => {  // value is obj it has input keys and their values n destructd  obj name reps name of form field that was updated
+            if (name === "title") { // check if form filed thats UPDATED is title then const slug "slug come from input filed jiska naam slug rakha hai" value is an obj
                 setValue("slug", slugTransform(value.title), { shouldValidate: true });
             }
         });
@@ -111,7 +123,8 @@ export default function PostForm({post}) {
             className="mb-4"
             {...register("status", { required: true })}
         />
-        <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
+        <Button type="submit" bgColor={post ? "bg-green-500" : undefined} 
+        className="w-full transform transition-transform duration-200 active:scale-95">
             {post ? "Update" : "Submit"}
         </Button>
     </div>

@@ -15,7 +15,7 @@ export class Service{
         .setEndpoint(conf.appwriteUrl)
         .setProject(conf.appwriteProjectId);
         this.databases = new Databases(this.client);
-        this.bucket = new Storage(this.cient);
+        this.bucket = new Storage(this.client);
 
     }
     async createPost({title, slug, content, featuredImage, 
@@ -35,7 +35,7 @@ export class Service{
                 )
                 
             } catch (error) {
-                console.log(error);
+                console.log("createPosterror",error);
                 
             }
         }
@@ -43,7 +43,7 @@ export class Service{
             status}){
                 try {
                     return await this.databases.updateDocument(
-                        confg.appwriteDatabaseId,
+                        conf.appwriteDatabaseId,
                         conf.appwriteCollectionId,
                         slug,
                         {

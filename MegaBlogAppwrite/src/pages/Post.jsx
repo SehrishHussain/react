@@ -17,7 +17,7 @@ export default function Post() {
     useEffect(() => {
         if (slug) {
             appwriteService.getPost(slug).then((post) => {
-                if (post) setPost(post);
+                if (post) setPost(post); // if post found it updates the state
                 else navigate("/");
             });
         } else navigate("/");
@@ -39,8 +39,10 @@ export default function Post() {
                     <img
                         src={appwriteService.getFilePreview(post.featuredImage)}
                         alt={post.title}
-                        className="rounded-xl"
+                        className="w-auto, h-auto, and max-w-full"
+                       
                     />
+                     {console.log("post featuredImgae",post.featuredImage, )}
 
                     {isAuthor && (
                         <div className="absolute right-6 top-6">

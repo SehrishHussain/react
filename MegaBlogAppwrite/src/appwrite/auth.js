@@ -14,7 +14,7 @@ export class AuthService{
         .setEndpoint(conf.appwriteUrl)
         .setProject(conf.appwriteProjectId);
         this.account = new Account(this.client);
-        console.log("createeMAILsESS", this.account.createEmailPasswordSession("email.COM", "asasasasas"))
+      
     }
 
     async createAccount({email, password, name}) {
