@@ -135,18 +135,20 @@ export class Service{
     }
 
     async getFilePreview(fileId){
+        let imgObj;
         try {
-            return this.bucket.getFilePreview(
+            imgObj = this.bucket.getFilePreview(
                 conf.appwriteBucketId,
                 fileId
-            )
-            
+            );
+            console.log("Image Object",imgObj);
+            return imgObj;
         } catch (error) {
-            console.log("error in getFile Preview", error);
-            
+            console.log("error in getFilePreview", error);
         }
     }
+   
 }
 
-const service = new Service();
-export default service
+const appwriteService = new Service();
+export default appwriteService
