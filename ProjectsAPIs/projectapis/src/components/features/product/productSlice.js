@@ -11,13 +11,14 @@ const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
-        setProducts: (state, action) => {
-            state.products = action.payload;
-        },
+        setProducts: (state, action) => { // This reducer updates the products array in the state with the new list from the action.payload.
 
-        selectedProduct: (state, action) => {
+            state.products = action.payload;
+        }, //action is an obj, action.payload contains new list of products
+
+        selectedProduct: (state, action) => { //in action object, payload contains selected product
             state.selectedProduct = action.payload;
-        },
+        }, //this reducer updates the selectedProduct part of the state to the selected producted given in payload
     },
 });
 

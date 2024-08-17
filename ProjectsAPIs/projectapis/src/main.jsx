@@ -8,7 +8,7 @@ import RandomJokes from './components/RandomJokes'
 import RandomProduct from './components/RandomProduct'
 import ProductDetail from './components/ProductDetail'
 import {Provider} from 'react-redux';
-import {store} from './store/store'
+import {store} from './components/store/store'
 
 
 const router = createBrowserRouter(
