@@ -6,7 +6,7 @@ import Header from './header/Header';
 function RandomJokes() {
   const [jokes, setJoke] = useState([]);
 
-  useEffect(() => {
+  
     const fetchJoke = async () => {
       try {
         // Make the GET request to the public joke API
@@ -28,14 +28,22 @@ function RandomJokes() {
         console.error("Error in fetching", error);
       }
     };
-
-    fetchJoke();
-  }, []);
+    
+   
+  
 
   return (
     <>
     <Header/>
       <h1 className="text-3xl font-bold text-center my-6 text-gray-800">Jokes</h1>
+      <div className="flex justify-center my-4">
+        <button
+          onClick={fetchJoke}
+          className="bg-blue-400 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transform transition-transform duration-200 hover:scale-105"
+        >
+          Generate Random Jokes
+        </button>
+      </div>
       <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto">
         {jokes.map((joke) => (
           <div

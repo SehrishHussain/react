@@ -53,6 +53,7 @@ export default function Header() {
                                     Random Products
                                 </NavLink>
                 </li>
+                
             </ul>
         </nav>
         </header>

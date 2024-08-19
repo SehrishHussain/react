@@ -1,16 +1,16 @@
 import {React, useState, useEffect} from "react";
 import axios from "axios";
 import {Link} from 'react-router-dom'
-import Header from "./header/Header";
+import Header from "../header/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts, selectedProduct } from "./features/product/productSlice";
+import { setProducts, selectedProduct } from "../features/product/productSlice";
 
  function RandomProduct(){
    // const [products, setProducts] = useState([]);
     const dispatch = useDispatch();
     const products = useSelector((state) => state.product.products);
 
-   useEffect(() => {
+ 
     const fetchProducts = async () => {
         try {
             const response = await axios.get("https://api.freeapi.app/api/v1/public/randomproducts?page=1&limit=10&inc=category%2Cprice%2Cthumbnail%2Cimages%2Ctitle%2Cid&query=mens-watches")
@@ -30,9 +30,11 @@ import { setProducts, selectedProduct } from "./features/product/productSlice";
         }
         
     }
-    fetchProducts();
+    
 
-   }, [dispatch]);
+  
+
+   
 
    const handleProductClick = (product) => {
     dispatch(selectedProduct(product));
@@ -42,8 +44,16 @@ import { setProducts, selectedProduct } from "./features/product/productSlice";
    return(
     <>
     <Header/>
-    <h1 className="text-3xl font-bold text-center my-6 text-gray-800">Products</h1>
-      <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto">
+    <h1 className="text-3xl font-bold text-center my-6 text-gray-800">Random Products</h1>
+    <div className="flex justify-center my-4">
+        <button
+          onClick={fetchProducts}
+          className="bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transform transition-transform duration-200 hover:scale-105"
+        >
+          Provide Random List of Products
+        </button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
       {products.map((product) => (
         <Link to={`/product/${product.id}`} key={product.id}
         onClick={() => handleProductClick(product)}
