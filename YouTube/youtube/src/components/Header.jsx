@@ -11,19 +11,24 @@ export default function Header() {
       <img src='/assets/images/logo.png' alt='Logo' style={{ cursor: 'pointer' }} />
     </div>
 
-    <div style={{ flexGrow: 1, marginLeft: '10px', marginRight: '10px' }}>
+    <div style={{ flexGrow: 1, marginLeft: '10px', marginRight: '10px', position: 'relative' }}>
       <input
         placeholder='Search'
         type='text'
         style={{
           width: '90%',
-          padding: '8px 12px',
+          padding: '8px 40px 8px 12px',
           border: '1px solid #ccc',
-          borderRadius: '4px',
+          borderRadius: '90px',
           outline: 'none',
           
         }}
       />
+      <img
+      src='/assets/images/search.png'
+      style={{
+        position: 'absolute',
+        padding: '8px 12px'}}/>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'center'}}>
