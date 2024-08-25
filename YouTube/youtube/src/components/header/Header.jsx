@@ -4,6 +4,7 @@ import { AiFillVideoCamera, AiFillBell, AiFillSetting } from 'react-icons/ai';
 
 
 function Header() {
+  const isloggedIn = true;
   return (
     <header className="header">
       <div className="header__menu">
@@ -30,10 +31,18 @@ function Header() {
         alt='mic'/>
       </div>
       </div>
+        <div className='signin-div'>
+        {isloggedIn && (
+          <div className="sign-in">
 
-      <div className="sign-in">
-        <button className="sign-in__button">Sign In</button>
-      </div>
+          <AiFillVideoCamera className='icon-style' title="Create Video" />
+          <AiFillBell className='icon-style' title="Notifications"  />
+          <AiFillSetting className='icon-style' title="Account Settings" />
+          </div>
+        )}
+        </div>
+      
+      
     </header>
   );
 }

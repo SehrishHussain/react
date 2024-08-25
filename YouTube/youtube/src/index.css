@@ -1,0 +1,13 @@
+/* index.css or App.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #3a3a3a; /* Set the desired background color */
+    color: white;
+}
+  
+  #root {
+    height: 100%;
+  }
+  

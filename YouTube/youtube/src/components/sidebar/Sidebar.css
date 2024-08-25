@@ -1,0 +1,32 @@
+/* Sidebar container */
+.sidebar {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 2.5rem; /* Sidebar width */
+   /* Full viewport height */
+    
+  
+
+  }
+  
+  /* Sidebar menu items */
+  .sidebar_item {
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+  
+ 
+  @media (min-width: 1024px) {
+    .sidebar__item {
+      margin-bottom: 2rem; /* Increase space between items on large screens */
+    }
+  }
+  
+  /* For smaller screens */
+  @media (max-width: 600px) {
+    .sidebar__item {
+      margin-bottom: 0.5rem; /* Reduce space between items on small screens */
+    }
+  }
+  
