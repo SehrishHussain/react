@@ -14,7 +14,7 @@ function Content()  {
   if (status === 'failed') {
     return <p>Error: {error}</p>;
   }
-  console.log('data',data.data.data);
+  console.log('data', data.data.data);
 
   return (
     <div>
@@ -25,7 +25,7 @@ function Content()  {
         <ul>
           {data.items.map((item) => (
             <li key={item.id}>{item.title}</li>
-          ))}
+          ))} 
         </ul>
       ) : (
         <p>No data available</p>

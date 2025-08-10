@@ -23,10 +23,10 @@ export class AuthService{
            console.log('User account created:', userAccount);
            if (userAccount) {
             // call another method
-            return this.login({email, password}) //want to login directly if userAccount is succfully made
+            return this.login({email, password}) //want to login directly if userAccount is successfully made
             
            } else {
-            return userAccount //if acct not made userAcount can be null
+            return userAccount //if acct not made user Account can be null
             
            }
         } catch (error) {

@@ -1,8 +1,18 @@
+body {
+  background-color: #f2e2d2; /* Your desired background color */
+  margin: 0;
+  min-height: 100vh;
+   padding: 1rem; /* Add space around the content */
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #fff; /* White content background */
+  border-radius: 16px; /* Main rounded corners */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Soft shadow for depth */
 }
 
 .logo {

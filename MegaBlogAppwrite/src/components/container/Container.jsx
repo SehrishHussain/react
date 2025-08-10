@@ -3,7 +3,7 @@
 import React from 'react'
 
 function Container({children}) {
-  return <div className='w-auto, h-auto, and max-w-full'>{children}</div>;
+  return <div className='w-full max-w-full  rounded-lg p-4  '>{children}</div>;
   
 }
 

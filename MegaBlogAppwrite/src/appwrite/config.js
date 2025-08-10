@@ -113,7 +113,7 @@ export class Service{
             file
            ) 
         } catch (error) {
-            console.log("upload file arror: ", error)
+            console.log("upload file error: ", error)
             return false;
             
         }
