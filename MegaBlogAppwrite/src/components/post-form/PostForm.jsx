@@ -23,6 +23,7 @@ export default function PostForm({post}) {
     // what to do when user submits form: must have sent data. 
     // In react-hook-form data is accessed via register object
     const submit = async(data) => {
+        console.log("Form Submitted Data:", data);
            let file = null;
 
            if (data.image[0]) {
