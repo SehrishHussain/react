@@ -75,6 +75,21 @@ export class Service{
                 
             }
         }
+        async getUserPosts(userId) {
+    try {
+        return await this.databases.listDocuments(
+            conf.appwriteDatabaseId,
+            conf.appwriteCollectionId,
+            [
+                Query.equal("userId", userId) // 👈 userId must exist in your schema
+            ]
+        );
+    } catch (error) {
+        console.log("getUserPosts error:", error);
+        return false;
+    }
+}
+
     async getPost(slug){
         try {
             return await this.databases.getDocument(
@@ -134,19 +149,42 @@ export class Service{
         }
     }
 
-    async getFilePreview(fileId){
+     getFilePreview(fileId){
         let imgObj;
         try {
             imgObj = this.bucket.getFilePreview(
                 conf.appwriteBucketId,
                 fileId
-            );
+            ).toString();
             console.log("Image Object",imgObj);
             return imgObj;
         } catch (error) {
             console.log("error in getFilePreview", error);
         }
     }
+
+    getFileView(fileId) {
+    try {
+        return this.bucket.getFileView(
+            conf.appwriteBucketId,
+            fileId
+        ).toString();
+    } catch (error) {
+        console.log("error in getFileView", error);
+        return false;
+    }
+}
+getFileView(fileId) {
+    try {
+        return this.bucket.getFileView(
+            conf.appwriteBucketId,
+            fileId
+        ).toString();
+    } catch (error) {
+        console.log("error in getFileView", error);
+        return false;
+    }
+}
    
 }
 

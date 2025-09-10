@@ -7,7 +7,7 @@ import { useSelector } from "react-redux"; // assuming you keep user in redux au
 function Home() {
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
-  const authStatus = useSelector((state) => state.auth.user); // your user object
+  const authStatus = useSelector((state) => state.auth.userData); // your user object
 
   useEffect(() => {
     appwriteService.getPosts().then((res) => {
