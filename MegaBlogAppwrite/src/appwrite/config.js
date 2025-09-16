@@ -1,5 +1,6 @@
 // config.js - Appwrite service wrapper
 import conf from "../confg/confg";
+import { setUser } from "../store/authSlice";
 import client from "./client";
 import authService from "./auth"; // ✅ import your AuthService
 import { ID, Databases, Storage, Query, Permission, Role } from "appwrite";
@@ -13,8 +14,9 @@ export class Service {
     this.bucket = new Storage(client);
   }
 
-  // ✅ Create Post
-  async createPost({ title, slug, content, featuredImage, status }) {
+  
+// ✅ Create Post
+async createPost({ title, slug, content, featuredImage, status }, dispatch) {
     try {
       // 1. Get the logged-in user
       const currentUser = await authService.getCurrentUser();
@@ -23,9 +25,17 @@ export class Service {
       const userId = currentUser.$id;
       const role = currentUser.role; // comes from prefs (see auth.js)
 
-      if (role === "reader") {
-        throw new Error("Readers cannot create posts");
+     if (role === "reader") {
+      await authService.account.updatePrefs({ role: "author" });
+      const updatedUser = await authService.getCurrentUser();
+
+// ✅ update Redux immediately
+      if (dispatch) {
+        dispatch(setUser(updatedUser));
       }
+
+      role = "author";
+    }
 
       // 2. Define permissions
       let permissions = [
@@ -64,6 +74,7 @@ export class Service {
     }
   }
 
+
   // ✅ Update Post
   async updatePost(postId, { title, content, featuredImage, status }) {
   try {
@@ -95,35 +106,34 @@ export class Service {
 
 
   // ✅ Delete Post
-  async deletePost(slug) {
-    try {
-      const posts = await this.databases.listDocuments(
+  async deletePost(postId) {
+  try {
+    const currentUser = await authService.getCurrentUser();
+    if (!currentUser) throw new Error("User not logged in");
+
+    // ✅ Get the post document directly
+    const post = await this.databases.getDocument(
+      conf.appwriteDatabaseId,
+      conf.appwriteCollectionId,
+      postId
+    );
+
+    if (currentUser.role === "admin" || post.userId === currentUser.$id) {
+      await this.databases.deleteDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
-        [Query.equal("slug", slug)]
+        postId
       );
-
-      if (!posts.documents.length) throw new Error("Post not found");
-      const post = posts.documents[0];
-
-      const currentUser = await authService.getCurrentUser();
-      if (!currentUser) throw new Error("User not logged in");
-
-      if (currentUser.role === "admin" || post.userId === currentUser.$id) {
-        await this.databases.deleteDocument(
-          conf.appwriteDatabaseId,
-          conf.appwriteCollectionId,
-          post.$id
-        );
-        return true;
-      } else {
-        throw new Error("Permission denied");
-      }
-    } catch (error) {
-      console.log("deletePost error:", error.message);
-      return false;
+      return true;
+    } else {
+      throw new Error("Permission denied");
     }
+  } catch (error) {
+    console.error("deletePost error:", error.message);
+    return false;
   }
+}
+
 
   // ✅ Get Posts of a User
   // ✅ Get Posts of a User
@@ -187,8 +197,8 @@ async getUserPosts(userId) {
    async incrementViews(postId, currentViews) {
     try {
       const response = await this.databases.updateDocument(
-        conf.databaseId,
-        conf.collectionId,
+        conf.appwriteDatabaseId,
+      conf.appwriteCollectionId,
         postId,
         { views: currentViews + 1 }
       );

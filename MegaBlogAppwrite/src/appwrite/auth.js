@@ -3,96 +3,100 @@ import client from "./client";
 import { Account, ID } from "appwrite";
 
 export class AuthService {
- 
   account;
 
   constructor() {
-    
     this.account = new Account(client);
   }
 
   // Create user + auto login
- async createAccount({ email, password, name, role = "author" }) {
-  try {
-    // 1. Create the account
-    const userAccount = await this.account.create(
-      ID.unique(),
-      email,
-      password,
-      name
-    );
-    console.log("User account created:", userAccount);
-
-    if (!userAccount) {
-      return null;
-    }
-
-    // 2. Auto login (creates a session so user is no longer "guest")
-    await this.login({ email, password });
-
-    // 3. Now update prefs (requires an active session)
-    await this.account.updatePrefs({ role });
-
-    // 4. Return the full current user with prefs
-    return await this.getCurrentUser();
-  } catch (error) {
-    console.error("Error creating account:", error);
-    throw error;
-  }
-}
-
-
-  // Email + Password login
-  async login({ email, password }) {
+  async createAccount({ email, password, name, role = "reader" }) {
     try {
-      return await this.account.createEmailPasswordSession(email, password);
+      const userAccount = await this.account.create(
+        ID.unique(),
+        email,
+        password,
+        name
+      );
+
+      if (!userAccount) return null;
+
+      // Auto login
+      await this.login({ email, password });
+
+      // Set initial role (default: reader)
+      await this.account.updatePrefs({ role });
+
+      return await this.getCurrentUser();
     } catch (error) {
+      console.error("Error creating account:", error);
       throw error;
     }
   }
 
-  // 🔥 Google OAuth login
- async loginWithGoogle() {
-  return this.account.createOAuth2Session(
-    "google",
-    "http://localhost:5173/oauth-callback", // success redirect
-    "http://localhost:5173/login"           // failure redirect
-  );
-}
+  // Email + Password login
+  async login({ email, password }) {
+    return await this.account.createEmailPasswordSession(email, password);
+  }
 
+  // Google OAuth login
+  async loginWithGoogle() {
+    return this.account.createOAuth2Session(
+      "google",
+      "http://localhost:5173/oauth-callback",
+      "http://localhost:5173/login"
+    );
+  }
+
+  // Ensure every user always has a role
+  async ensureRole(defaultRole = "reader") {
+    try {
+      const user = await this.account.get();
+
+      if (!user.prefs?.role) {
+        await this.account.updatePrefs({ role: defaultRole });
+        user.prefs = { ...user.prefs, role: defaultRole };
+      }
+
+      return {
+        ...user,
+        role: user.prefs.role,
+      };
+    } catch (error) {
+      console.error("Error ensuring role:", error);
+      throw error;
+    }
+  }
+
+  // Get current user
+ // Get current user (always fresh prefs)
 async getCurrentUser() {
   try {
-    return await this.client.account.get();
+    const user = await this.account.get(); // fetches current user from Appwrite
+
+    // Ensure prefs exist
+    if (!user.prefs) {
+      user.prefs = {};
+    }
+
+    // If role missing, fallback to "reader"
+    const role = user.prefs.role || "reader";
+
+    return {
+      ...user,
+      role,
+    };
   } catch (error) {
+    console.log("appwrite service: current user : ", error);
     return null;
   }
 }
 
 
-  // Get current user
- async getCurrentUser() {
-  try {
-    const user = await this.account.get();
-    return {
-      ...user,
-      role: user.prefs?.role || "author", // default if not set
-    };
-  } catch (error) {
-    console.log("appwrite service: current user : ", error);
-  }
-  return null;
-}
-
-  // Logout
   async logout() {
-    try {
-      await this.account.deleteSessions();
-    } catch (error) {
-      console.log("appwrite service: logout ", error);
-    }
+    await this.account.deleteSessions();
   }
 }
 
 const authService = new AuthService();
-
 export default authService;

@@ -2,11 +2,14 @@ import { useForm } from 'react-hook-form'
 import React, { useCallback, useState } from 'react'
 import { Button, Input, Select, RTE } from '../index'
 import appwriteService from '../../appwrite/config'
-import { useSelector } from 'react-redux'
+import { useSelector , useDispatch} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 
+
+
 export default function PostForm({ post }) {
+  const dispatch = useDispatch(); 
   const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
     defaultValues: {
       title: post?.title || '',
@@ -43,7 +46,9 @@ export default function PostForm({ post }) {
         const dbPost = await appwriteService.createPost({
           ...data,
           userId: userData.$id,
-        })
+        },
+      dispatch
+    )
         if (dbPost) navigate(`/post/${dbPost.$id}`)
       }
     } catch (err) {
