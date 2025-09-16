@@ -55,8 +55,8 @@ export class AuthService {
  async loginWithGoogle() {
   return this.account.createOAuth2Session(
     "google",
-    "http://localhost:3000/oauth-callback", // success redirect
-    "http://localhost:3000/login"           // failure redirect
+    "http://localhost:5173/oauth-callback", // success redirect
+    "http://localhost:5173/login"           // failure redirect
   );
 }
 
