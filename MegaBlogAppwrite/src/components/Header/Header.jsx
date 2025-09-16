@@ -29,31 +29,38 @@ function Header() {
 
           {/* Nav links */}
           <ul className="flex ml-auto items-center space-x-2">
-            {navItems.map((item) =>
-              item.active ? (
-                <li key={item.name}>
-                  <button
-                    onClick={() => navigate(item.slug)}
-                    className="inline-block px-4 py-2 rounded-full transition-colors duration-300 hover:bg-[#e2cbb8] dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200"
-                  >
-                    {item.name}
-                  </button>
-                </li>
-              ) : null
-            )}
+  {navItems.map((item) =>
+    item.active ? (
+      <li key={item.name}>
+        <button
+          onClick={() => navigate(item.slug)}
+          className="inline-block px-4 py-2 rounded-full 
+             border border-transparent
+             transition-colors transition-transform duration-200 
+             hover:bg-[#e2cbb8] dark:hover:bg-gray-700 
+             text-gray-800 dark:text-gray-200
+             transform hover:scale-105 hover:shadow-lg
+"
+        >
+          {item.name}
+        </button>
+      </li>
+    ) : null
+  )}
 
-            {/* Logout */}
-            {authStatus && (
-              <li>
-                <LogoutBtn />
-              </li>
-            )}
+  {/* Logout */}
+  {authStatus && (
+    <li>
+      <LogoutBtn />
+    </li>
+  )}
 
-            {/* Theme Toggle */}
-            <li className="ml-2">
-              <ThemeToggle />
-            </li>
-          </ul>
+  {/* Theme Toggle - ❌ no hover scaling here */}
+  <li className="ml-2">
+    <ThemeToggle />
+  </li>
+</ul>
+
         </nav>
       </Container>
     </header>

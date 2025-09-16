@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Container } from "../components";
+import { Button, Container } from  "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import ConfirmDialog from "../components/ConfirmDialog";
@@ -14,14 +14,34 @@ export default function Post() {
 
   const userData = useSelector((state) => state.auth.userData);
   const isAuthor = post && userData ? post.userId === userData.$id : false;
+  console.log("isAuthor", isAuthor)
+ // console.log("post.userId", post.userId);
+// console.log("userData.$id", userData.$id)
 
+  /* console.log("post.userIdddd:", post?.userId);
+console.log("userDataaaa:", userData);
+console.log("userData.$idddd:", userData?.$id);
+*/
   useEffect(() => {
     if (slug) {
-      appwriteService.getPost(slug).then((post) => {
-        if (post) setPost(post);
-        else navigate("/");
+      appwriteService.getPost(slug).then((fetchedPost) => {
+        if (fetchedPost) {
+          setPost(fetchedPost);
+
+          // 🔹 Increment views
+          if (fetchedPost.$id) {
+            appwriteService.incrementViews(
+              fetchedPost.$id,
+              fetchedPost.views || 0
+            );
+          }
+        } else {
+          navigate("/");
+        }
       });
-    } else navigate("/");
+    } else {
+      navigate("/");
+    }
   }, [slug, navigate]);
 
   const deletePost = () => {
@@ -38,25 +58,26 @@ export default function Post() {
     ? appwriteService.getFileView(post.featuredImage)
     : "";
 
+/*     console.log("post.userIdddd:", post?.userId);
+console.log("Current userId:", userData.$id);
+console.log("Current email:", userData.email);
+console.log("UseData", userData) */
+console.log("post", post)
+
   return post ? (
-    <div className="py-8 ">
+    <div className="py-8">
       <Container>
-        {/* 🔹 Action buttons at top-right */}
+        {/* Author controls */}
         {isAuthor && (
-          <div className="absolute right-6 top-6 flex space-x-3">
-            <Link to={`/edit-post/${post.$id}`}>
-              <Button
-                className="rounded-full px-5 py-2 bg-green-500 text-white 
-                           hover:bg-green-600 transition-colors
-                           dark:bg-green-600 dark:hover:bg-green-700"
-              >
+          <div className="flex justify-end mb-4 space-x-3">
+            <Link to={`/edit-post/${post.slug}`}>
+              <Button className="min-w-[96px] rounded-full px-5 py-2 bg-green-500 text-white hover:bg-green-600 transition-colors dark:bg-green-600 dark:hover:bg-green-700">
                 Edit
               </Button>
             </Link>
             <Button
               onClick={() => setShowConfirm(true)}
-              className="rounded-full px-5 py-2 bg-red-500 text-white 
-                         hover:bg-red-600 transition-colors"
+              className="min-w-[96px] rounded-full px-5 py-2 bg-red-500 text-white hover:bg-red-600 transition-colors"
             >
               Delete
             </Button>
@@ -77,9 +98,14 @@ export default function Post() {
         </div>
 
         {/* Blog Title */}
-        <div className="w-full mb-6">
+        <div className="w-full mb-2">
           <h1 className="text-2xl font-bold">{post.title}</h1>
         </div>
+
+        {/* 🔹 Show views */}
+        <p className="text-sm text-gray-500 mb-6">
+          👁️ {post.views || 0} views
+        </p>
 
         {/* Blog Content */}
         <div className="browser-css">{parse(post.content)}</div>

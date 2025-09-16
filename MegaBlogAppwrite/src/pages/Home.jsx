@@ -1,37 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import appwriteService from "../appwrite/config";
-import { Container, PostCard } from "../components";
-import { useSelector } from "react-redux"; // assuming you keep user in redux auth state
+import { Container } from "../components";
+import { useSelector } from "react-redux";
+import PostCard from "../components/PostCard";
+
 
 function Home() {
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
-  const authStatus = useSelector((state) => state.auth.userData); // your user object
+  const authStatus = useSelector((state) => state.auth.userData); // user object
 
-  useEffect(() => {
-    appwriteService.getPosts().then((res) => {
-      if (res) {
-        setPosts(res.documents);
-      }
+ useEffect(() => {
+  // Fetch all posts
+  appwriteService.getPosts().then((res) => {
+   // console.log("📌 getPosts raw response:", res); 
+    if (res) setPosts(res.documents);
+  });
+
+//  console.log("Auth Statuss:", authStatus);
+
+  // Fetch only this user's posts
+  if (authStatus?.$id) {
+    appwriteService.getUserPosts(authStatus.$id).then((res) => {
+      console.log("user's posts", res)
+      if (res) setUserPosts(res.documents);
+      
     });
+  }
+}, [authStatus]);
 
-    // Fetch user posts if logged in
-    if (authStatus) {
-      appwriteService.getUserPosts(authStatus.$id).then((res) => {
-        console.log("User posts response:", res);
-        if (res) {
-          setUserPosts(res.documents);
-        }
-      });
-    }
-  }, [authStatus]);
 
-  // Split posts
-  const mostReadPosts = posts.slice(0, 4); // placeholder: you can sort by views
-  const latestPosts = posts.slice(0, 8);
+  // 🔥 Sort helpers
+  const trendingPosts = [...posts]
+    .sort((a, b) => (b.views || 0) - (a.views || 0)) // assumes "views" field exists
+    .slice(0, 4);
 
-  // Reusable animation config
+  const latestPosts = [...posts]
+    .sort((a, b) => new Date(b.$createdAt) - new Date(a.$createdAt))
+    .slice(0, 8);
+
+  // Animation config
   const sectionVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -47,14 +56,12 @@ function Home() {
       <Container>
         <div className="flex flex-wrap">
           <div className="p-2 w-full">
-            <h1 className="text-2xl font-bold hover:text-gray-500">
-              Welcome to Blogify!!
-            </h1>
+            <h1 className="text-2xl font-bold">Welcome to Blogify!!</h1>
           </div>
         </div>
       </Container>
 
-      {/* Most Read Section */}
+      {/* Trending Posts */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -62,23 +69,25 @@ function Home() {
         variants={sectionVariants}
       >
         <Container>
-          <h2 className="text-xl font-semibold mb-4 text-left">
-            📈 Most Read Posts
-          </h2>
+          <h2 className="text-xl font-semibold mb-4 text-left">Trending Posts</h2>
           <div className="flex flex-wrap">
-            {mostReadPosts.map((post) => (
-              <div
-                key={post.$id}
-                className="p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
-              >
-                <PostCard {...post} />
-              </div>
-            ))}
+            {trendingPosts.length > 0 ? (
+              trendingPosts.map((post) => (
+                <div
+                  key={post.$id}
+                  className="p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
+                >
+                  <PostCard {...post} />
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">No trending posts yet.</p>
+            )}
           </div>
         </Container>
       </motion.div>
 
-      {/* Latest Posts Section */}
+      {/* Latest Uploads */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -86,24 +95,26 @@ function Home() {
         variants={sectionVariants}
       >
         <Container>
-          <h2 className="text-xl font-semibold mb-4 text-left">
-            🆕 Latest Posts
-          </h2>
+          <h2 className="text-xl font-semibold mb-4 text-left">Latest Uploads</h2>
           <div className="flex flex-wrap">
-            {latestPosts.map((post) => (
-              <div
-                key={post.$id}
-                className="p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
-              >
-                <PostCard {...post} />
-              </div>
-            ))}
+            {latestPosts.length > 0 ? (
+              latestPosts.map((post) => (
+                <div
+                  key={post.$id}
+                  className="p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
+                >
+                  <PostCard {...post} />
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">No posts available.</p>
+            )}
           </div>
         </Container>
       </motion.div>
 
-      {/* User's Posts Section */}
-      {authStatus && userPosts.length > 0 && (
+      {/* My Blogs */}
+      {authStatus && (
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -111,18 +122,22 @@ function Home() {
           variants={sectionVariants}
         >
           <Container>
-            <h2 className="text-xl font-semibold mb-4 text-left">
-              ✍️ Your Blogs
-            </h2>
+            <h2 className="text-xl font-semibold mb-4 text-left">My Blogs</h2>
             <div className="flex flex-wrap">
-              {userPosts.map((post) => (
-                <div
-                  key={post.$id}
-                  className="p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
-                >
-                  <PostCard {...post} />
-                </div>
-              ))}
+              {userPosts.length > 0 ? (
+                userPosts.map((post) => (
+                  <div
+                    key={post.$id}
+                    className="p-2 w-full md:w-1/2 lg:w-1/3 xl:w-1/4"
+                  >
+                    <PostCard {...post} />
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">
+                  You haven’t written any blogs yet.
+                </p>
+              )}
             </div>
           </Container>
         </motion.div>

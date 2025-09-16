@@ -11,7 +11,7 @@ import { AuthLayout, Login } from './components/index.js'
 import AddPost from "./pages/Addpost.jsx";
 import Signup from './pages/Signup'
 import EditPost from "./pages/EditPost";
-
+import OAuthCallback from './pages/OAuthCallback.jsx'
 import Post from "./pages/Post";
 
 import AllPosts from "./pages/AllPosts";
@@ -73,6 +73,10 @@ const router = createBrowserRouter([
         path: "/post/:slug",
         element: <Post />,
     },
+    {
+      path: "/oauth-callback",
+      element: <OAuthCallback />
+    }
     ]
   }
 ])

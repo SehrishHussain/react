@@ -1,26 +1,24 @@
-import {createSlice} from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
-// this is to track if user is authenticed from store
 const initialState = {
-    status: false,
-    userData: null
-}
-const authSlice = createSlice({
-    name: "auth",
-    initialState,
-    reducers: {  //methods.. everythng in reducer has state and action
-        login: (state, action) => {
-            state.status = true;
-            state.userData = action.payload.userData;
+  status: false,
+  userData: null, // will include { $id, email, name, role, ... }
+};
 
-        },
-        logout: (state) => {
-            state.status = false;
-            state.userData = null;
-        }
-    }
+const authSlice = createSlice({
+  name: "auth",
+  initialState,
+  reducers: {
+    login: (state, action) => {
+      state.status = true;
+      state.userData = action.payload; // ✅ store full user directly
+    },
+    logout: (state) => {
+      state.status = false;
+      state.userData = null;
+    },
+  },
 });
 
-export const {login, logout} = authSlice.actions; //recducer k ander login and logout actions hain
-
+export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;
