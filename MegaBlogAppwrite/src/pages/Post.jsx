@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import appwriteService from "../appwrite/config";
+import { blogService} from "../services";
 import { Button, Container } from  "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
@@ -24,13 +24,13 @@ console.log("userData.$idddd:", userData?.$id);
 */
   useEffect(() => {
     if (slug) {
-      appwriteService.getPost(slug).then((fetchedPost) => {
+      blogService.getPost(slug).then((fetchedPost) => {
         if (fetchedPost) {
           setPost(fetchedPost);
 
           // 🔹 Increment views
           if (fetchedPost.$id) {
-            appwriteService.incrementViews(
+            blogService.incrementViews(
               fetchedPost.$id,
               fetchedPost.views || 0
             );
@@ -45,9 +45,9 @@ console.log("userData.$idddd:", userData?.$id);
   }, [slug, navigate]);
 
   const deletePost = () => {
-    appwriteService.deletePost(post.$id).then((status) => {
+    blogService.deletePost(post.$id).then((status) => {
       if (status) {
-        appwriteService.deleteFile(post.featuredImage);
+        blogService.deleteFile(post.featuredImage);
         setShowConfirm(false);
         navigate("/");
       }
@@ -55,7 +55,7 @@ console.log("userData.$idddd:", userData?.$id);
   };
 
   const imgUrl = post?.featuredImage
-    ? appwriteService.getFileView(post.featuredImage)
+    ? blogService.getFileView(post.featuredImage)
     : "";
 
 /*     console.log("post.userIdddd:", post?.userId);

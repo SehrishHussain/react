@@ -1,11 +1,11 @@
 // components/PostCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-import appwriteService from "../appwrite/config";
+import {blogService} from "../services";
 
 export default function PostCard({ $id, title, slug, featuredImage, views }) {
   const imgUrl = featuredImage
-    ? appwriteService.getFileView(featuredImage)
+    ? {blogService}.getFileView(featuredImage)
     : "https://via.placeholder.com/300x200";
 
   return (

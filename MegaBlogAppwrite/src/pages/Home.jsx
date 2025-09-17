@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import appwriteService from "../appwrite/config";
+import { blogService} from "../services";
 import { Container } from "../components";
 import { useSelector } from "react-redux";
 import PostCard from "../components/PostCard";
@@ -13,7 +13,7 @@ function Home() {
 
  useEffect(() => {
   // Fetch all posts
-  appwriteService.getPosts().then((res) => {
+  blogService.getPosts().then((res) => {
    // console.log("📌 getPosts raw response:", res); 
     if (res) setPosts(res.documents);
   });
@@ -22,7 +22,7 @@ function Home() {
 
   // Fetch only this user's posts
   if (authStatus?.$id) {
-    appwriteService.getUserPosts(authStatus.$id).then((res) => {
+    blogService.getUserPosts(authStatus.$id).then((res) => {
       console.log("user's posts", res)
       if (res) setUserPosts(res.documents);
       

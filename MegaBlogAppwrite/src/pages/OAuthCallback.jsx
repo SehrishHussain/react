@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login as authLogin } from "../store/authSlice";
-import authService from "../appwrite/auth";
+import  {authService } from "../services";
 
 function OAuthCallback() {
   const navigate = useNavigate();

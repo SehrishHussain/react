@@ -1,8 +1,8 @@
 // config.js - Appwrite service wrapper
-import conf from "../confg/confg";
-import { setUser } from "../store/authSlice";
+import conf from "../../confg/confg";
+import { setUser } from "../../store/authSlice";
 import client from "./client";
-import authService from "./auth"; // ✅ import your AuthService
+import {authService} from "./authService"; // ✅ import your AuthService
 import { ID, Databases, Storage, Query, Permission, Role } from "appwrite";
 
 export class Service {
@@ -243,5 +243,5 @@ async getUserPosts(userId) {
   
 }
 
-const appwriteService = new Service();
-export default appwriteService;
+const blogService = new Service();
+export { blogService };

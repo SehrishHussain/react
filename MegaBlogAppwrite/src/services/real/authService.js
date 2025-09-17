@@ -1,4 +1,4 @@
-import conf from "../confg/confg";
+import conf from "../../confg/confg";
 import client from "./client";
 import { Account, Databases, ID, Permission, Role, Query } from "appwrite";
 
@@ -81,14 +81,14 @@ export class AuthService {
     try {
       const profiles = await this.databases.listDocuments(
         conf.appwriteDatabaseId,
-        conf.profilesCollectionId,
+        
         [Query.equal("userId", userId)]
       );
 
       if (profiles.documents.length === 0) {
         await this.databases.createDocument(
           conf.appwriteDatabaseId,
-          conf.profilesCollectionId,
+         
           ID.unique(),
           {
             userId,
@@ -123,7 +123,7 @@ export class AuthService {
       // ✅ Fetch profile
       const profiles = await this.databases.listDocuments(
         conf.appwriteDatabaseId,
-        conf.profilesCollectionId,
+        
         [Query.equal("userId", user.$id)]
       );
 
@@ -146,4 +146,4 @@ export class AuthService {
 }
 
 const authService = new AuthService();
-export default authService;
+export { authService };

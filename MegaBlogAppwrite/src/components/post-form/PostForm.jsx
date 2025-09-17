@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import React, { useCallback, useState } from 'react'
 import { Button, Input, Select, RTE } from '../index'
-import appwriteService from '../../appwrite/config'
+import {blogService} from '../../services'
 import { useSelector , useDispatch} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -29,21 +29,21 @@ export default function PostForm({ post }) {
       let file = null
 
       if (data.image[0]) {
-        file = await appwriteService.uploadFile(data.image[0])
+        file = await blogService.uploadFile(data.image[0])
         if (post && post.featuredImage) {
-          await appwriteService.deleteFile(post.featuredImage)
+          await blogService.deleteFile(post.featuredImage)
         }
       }
 
       if (post) {
-        const dbPost = await appwriteService.updatePost(post.$id, {
+        const dbPost = await blogService.updatePost(post.$id, {
           ...data,
           featuredImage: file ? file.$id : post.featuredImage,
         })
         if (dbPost) navigate(`/post/${dbPost.$id}`)
       } else {
         if (file) data.featuredImage = file.$id
-        const dbPost = await appwriteService.createPost({
+        const dbPost = await blogService.createPost({
           ...data,
           userId: userData.$id,
         },
@@ -115,7 +115,7 @@ export default function PostForm({ post }) {
         {post && (
           <div className="w-full mb-4">
             <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
+              src={blogService.getFilePreview(post.featuredImage)}
               alt={post.title}
               className="rounded-lg"
             />
