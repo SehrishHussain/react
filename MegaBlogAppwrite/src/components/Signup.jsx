@@ -31,28 +31,28 @@ function Signup() {
 
     const signupWithGoogle = () => {
         try {
-            authService.loginWithGoogle(); // redirect to Google OAuth
+            authService.loginWithGoogle();
         } catch (error) {
             setError(error.message);
         }
     };
 
     return (
-        <div className="flex items-center justify-center">
-            <div className="mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10">
+        <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 transition-colors">
+            <div className="mx-auto w-full max-w-lg bg-gray-100 dark:bg-gray-800 rounded-xl p-10 border border-black/10 dark:border-gray-700 shadow-lg transition-colors">
                 <div className="mb-2 flex justify-center">
                     <span className="inline-block w-full max-w-[100px]">
                         <Logo width="100%" />
                     </span>
                 </div>
-                <h2 className="text-center text-2xl font-bold leading-tight">
+                <h2 className="text-center text-2xl font-bold leading-tight text-gray-900 dark:text-gray-100">
                     Sign up to create account
                 </h2>
-                <p className="mt-2 text-center text-base text-black/60">
+                <p className="mt-2 text-center text-base text-black/60 dark:text-gray-400">
                     Already have an account?&nbsp;
                     <Link
                         to="/login"
-                        className="font-medium text-primary transition-all duration-200 hover:underline"
+                        className="font-medium text-primary dark:text-blue-400 transition-all duration-200 hover:underline"
                     >
                         Sign In
                     </Link>
@@ -95,9 +95,9 @@ function Signup() {
 
                 {/* Divider */}
                 <div className="my-6 flex items-center justify-center">
-                    <span className="h-px w-1/3 bg-gray-300" />
-                    <span className="px-4 text-sm text-gray-500">OR</span>
-                    <span className="h-px w-1/3 bg-gray-300" />
+                    <span className="h-px w-1/3 bg-gray-300 dark:bg-gray-600" />
+                    <span className="px-4 text-sm text-gray-500 dark:text-gray-400">OR</span>
+                    <span className="h-px w-1/3 bg-gray-300 dark:bg-gray-600" />
                 </div>
 
                 {/* Google Signup */}

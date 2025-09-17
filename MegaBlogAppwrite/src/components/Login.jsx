@@ -20,8 +20,7 @@ function Login() {
       if (session) {
         const userData = await authService.getCurrentUser();
         if (userData) {
-          dispatch(authLogin( userData )); // now user already includes role
-
+          dispatch(authLogin(userData));
           navigate("/");
         }
       }
@@ -40,8 +39,8 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center w-full">
-      <div className="mx-auto w-full max-w-lg bg-[#fdfcdc] rounded-xl p-10 border border-black/10">
+    <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 transition-colors">
+      <div className="mx-auto w-full max-w-lg bg-[#fdfcdc] dark:bg-gray-800 rounded-xl p-10 border border-black/10 dark:border-gray-700 shadow-lg transition-colors">
         {/* Logo */}
         <div className="mb-2 flex justify-center">
           <span className="inline-block w-full max-w-[100px]">
@@ -50,13 +49,13 @@ function Login() {
         </div>
 
         {/* Heading */}
-        <h2 className="text-center text-2xl font-bold leading-tight">
+        <h2 className="text-center text-2xl font-bold leading-tight text-gray-900 dark:text-gray-100">
           Sign in to your account
         </h2>
-        <p className="mt-2 text-center text-base text-black/60">
+        <p className="mt-2 text-center text-base text-black/60 dark:text-gray-400">
           <Link
             to="/signup"
-            className="font-medium text-primary transition-all duration-200 hover:underline"
+            className="font-medium text-primary dark:text-blue-400 transition-all duration-200 hover:underline"
           >
             Sign Up
           </Link>
@@ -85,9 +84,7 @@ function Login() {
               label="Password: "
               type="password"
               placeholder="Enter your password"
-              {...register("password", {
-                required: true,
-              })}
+              {...register("password", { required: true })}
             />
             <Button type="submit" className="w-full">
               Sign in
@@ -97,9 +94,9 @@ function Login() {
 
         {/* Divider */}
         <div className="my-6 flex items-center justify-center">
-          <span className="h-px w-1/3 bg-gray-300" />
-          <span className="px-4 text-sm text-gray-500">OR</span>
-          <span className="h-px w-1/3 bg-gray-300" />
+          <span className="h-px w-1/3 bg-gray-300 dark:bg-gray-600" />
+          <span className="px-4 text-sm text-gray-500 dark:text-gray-400">OR</span>
+          <span className="h-px w-1/3 bg-gray-300 dark:bg-gray-600" />
         </div>
 
         {/* Google Auth */}

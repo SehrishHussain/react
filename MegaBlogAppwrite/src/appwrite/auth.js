@@ -1,12 +1,14 @@
 import conf from "../confg/confg";
 import client from "./client";
-import { Account, ID } from "appwrite";
+import { Account, Databases, ID, Permission, Role, Query } from "appwrite";
 
 export class AuthService {
   account;
+  databases;
 
   constructor() {
     this.account = new Account(client);
+    this.databases = new Databases(client);
   }
 
   // Create user + auto login
@@ -26,6 +28,9 @@ export class AuthService {
 
       // Set initial role (default: reader)
       await this.account.updatePrefs({ role });
+
+      // ✅ Ensure profile exists
+      await this.ensureProfile(userAccount.$id, name);
 
       return await this.getCurrentUser();
     } catch (error) {
@@ -58,6 +63,9 @@ export class AuthService {
         user.prefs = { ...user.prefs, role: defaultRole };
       }
 
+      // ✅ Ensure profile exists
+      await this.ensureProfile(user.$id, user.name);
+
       return {
         ...user,
         role: user.prefs.role,
@@ -68,30 +76,69 @@ export class AuthService {
     }
   }
 
-  // Get current user
- // Get current user (always fresh prefs)
-async getCurrentUser() {
-  try {
-    const user = await this.account.get(); // fetches current user from Appwrite
+  // ✅ Ensure profile exists for a user
+  async ensureProfile(userId, displayName = "") {
+    try {
+      const profiles = await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.profilesCollectionId,
+        [Query.equal("userId", userId)]
+      );
 
-    // Ensure prefs exist
-    if (!user.prefs) {
-      user.prefs = {};
+      if (profiles.documents.length === 0) {
+        await this.databases.createDocument(
+          conf.appwriteDatabaseId,
+          conf.profilesCollectionId,
+          ID.unique(),
+          {
+            userId,
+            displayName,
+            bio: "",
+            avatarId: null,
+            createdAt: new Date().toISOString(),
+          },
+          [
+            Permission.read(Role.any()), // anyone can view
+            Permission.update(Role.user(userId)), // only owner can update
+            Permission.delete(Role.user(userId)), // only owner can delete
+          ]
+        );
+      }
+    } catch (error) {
+      console.error("Error ensuring profile:", error);
     }
-
-    // If role missing, fallback to "reader"
-    const role = user.prefs.role || "reader";
-
-    return {
-      ...user,
-      role,
-    };
-  } catch (error) {
-    console.log("appwrite service: current user : ", error);
-    return null;
   }
-}
 
+  // Get current user (always fresh prefs + profile)
+  async getCurrentUser() {
+    try {
+      const user = await this.account.get();
+
+      if (!user.prefs) {
+        user.prefs = {};
+      }
+
+      const role = user.prefs.role || "reader";
+
+      // ✅ Fetch profile
+      const profiles = await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.profilesCollectionId,
+        [Query.equal("userId", user.$id)]
+      );
+
+      const profile = profiles.documents[0] || null;
+
+      return {
+        ...user,
+        role,
+        profile, // attach profile doc
+      };
+    } catch (error) {
+      console.log("appwrite service: current user : ", error);
+      return null;
+    }
+  }
 
   async logout() {
     await this.account.deleteSessions();
