@@ -1,0 +1,18 @@
+[
+  {
+    "id": "1",
+    "title": "Welcome to my blog",
+    "content": "This is the demo post with some example content.",
+    "author": { "id": "u1", "name": "Demo Author" },
+    "createdAt": "2024-10-01T09:00:00.000Z",
+    "tags": ["demo","welcome"]
+  },
+  {
+    "id": "2",
+    "title": "Second demo post",
+    "content": "Another demo post to show list behavior.",
+    "author": { "id": "u2", "name": "Contributor" },
+    "createdAt": "2024-10-02T10:30:00.000Z",
+    "tags": ["example","features"]
+  }
+]
