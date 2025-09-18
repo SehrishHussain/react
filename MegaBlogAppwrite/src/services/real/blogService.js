@@ -2,7 +2,7 @@
 import conf from "../../confg/confg";
 import { setUser } from "../../store/authSlice";
 import client from "./client";
-import {authService} from "./authService"; // ✅ import your AuthService
+import authService from "./authService"; // ✅ import your AuthService
 import { ID, Databases, Storage, Query, Permission, Role } from "appwrite";
 
 export class Service {
@@ -244,4 +244,4 @@ async getUserPosts(userId) {
 }
 
 const blogService = new Service();
-export { blogService };
+export default blogService ;

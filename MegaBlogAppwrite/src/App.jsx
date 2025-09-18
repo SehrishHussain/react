@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { useDispatch } from "react-redux";
-import {authService} from "./services/real/authService";
+import {authService} from "./services";
 import { login, logout } from "./store/authSlice";
 import { Header, Footer } from "./components";
 import { Outlet } from "react-router-dom";
+import { blogService } from "./services";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,16 @@ function App() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+  blogService.resetDemoData().then(() => {
+    blogService.getPosts().then((res) => {
+      console.log("📌 Fresh seeded posts:", res);
+      if (res?.documents) setPosts(res.documents);
+    });
+  });
+}, []);
+
 
   // Apply theme to <html>
   useEffect(() => {

@@ -56,7 +56,7 @@ console.log("userData.$idddd:", userData?.$id);
 
   const imgUrl = post?.featuredImage
     ? blogService.getFileView(post.featuredImage)
-    : "";
+    : "logo-light.png";
 
 /*     console.log("post.userIdddd:", post?.userId);
 console.log("Current userId:", userData.$id);

@@ -5,8 +5,8 @@ import {blogService} from "../services";
 
 export default function PostCard({ $id, title, slug, featuredImage, views }) {
   const imgUrl = featuredImage
-    ? {blogService}.getFileView(featuredImage)
-    : "https://via.placeholder.com/300x200";
+    ? blogService.getFileView(featuredImage)
+    : "/logo-light.png"; // "https://via.placeholder.com/300x200"
 
   return (
     <Link

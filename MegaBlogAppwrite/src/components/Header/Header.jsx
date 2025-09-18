@@ -50,15 +50,15 @@ function Header() {
 
   {/* Logout */}
   {authStatus && (
-    <li>
-      <LogoutBtn />
-    </li>
-  )}
+  <li key="logout">
+    <LogoutBtn />
+  </li>
+)}
 
   {/* Theme Toggle - ❌ no hover scaling here */}
-  <li className="ml-2">
-    <ThemeToggle />
-  </li>
+  <li key="theme-toggle" className="ml-2">
+  <ThemeToggle />
+</li>
 </ul>
 
         </nav>

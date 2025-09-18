@@ -11,10 +11,13 @@ function Home() {
   const [userPosts, setUserPosts] = useState([]);
   const authStatus = useSelector((state) => state.auth.userData); // user object
 
+console.log("posts:", posts);
+
+
  useEffect(() => {
   // Fetch all posts
   blogService.getPosts().then((res) => {
-   // console.log("📌 getPosts raw response:", res); 
+    console.log("📌 getPosts raw response:", res); 
     if (res) setPosts(res.documents);
   });
 

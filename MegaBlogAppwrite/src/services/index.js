@@ -1,16 +1,17 @@
-const useMock = import.meta.env.VITE_USE_MOCK === "true";
+import realAuth from "./real/authService";
+import realPosts from "./real/blogService";
+import mockAuth from "./mock/mockAuthService";
+import mockPosts from "./mock/mockBlogService";
 
-let authService;
-let blogService;
+const useMock = import.meta.env.VITE_USE_MOCK === "true"; 
+// 👆 make sure this matches your .env
 
-if (useMock) {
-  console.log("⚡ Using MOCK services");
-  ({ authService } = await import("./mock/mockAuthService.js"));
-  ({ blogService } = await import("./mock/mockBlogService.js"));
-} else {
-  console.log("✅ Using REAL Appwrite services");
-  ({ authService } = await import("./real/authService.js"));
-  ({ blogService } = await import("./real/blogService.js"));
-}
+export const authService = useMock ? mockAuth : realAuth;
+export const blogService = useMock ? mockPosts : realPosts;
 
-export { authService, blogService };
+const services = {
+   authService,
+  blogService
+};
+
+export default services;
